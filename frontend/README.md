@@ -1,3 +1,8 @@
+# Запуск
+
+docker build -t taski_frontend .
+docker run --rm -it -p 8000:8000 --name taski_frontend_test taski_frontend
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

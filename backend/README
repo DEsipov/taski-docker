@@ -1,0 +1,33 @@
+# Запуск
+docker run -p 8000:8000 --rm taski_backend
+docker run --name taski_backend_container -p 8000:8000 -v sqlite_data:/data taski_backend
+
+
+docker exec taski_backend_container python manage.py migrate
+docker run --rm -it -p 8000:8000 --name taski_frontend_test taski_frontend
+
+
+# Символ \ в конце строки указывает терминалу, что команда
+# продолжится на следующей строке
+docker run --name db \
+       --env-file .env \
+       -v pg_data:/var/lib/postgresql/data \
+       postgres:13.10
+# Запустить контейнер с именем db,
+# передать в контейнер переменные окружения из файла .env,
+# подключить Docker volume с названием pg_data,
+# контейнер создать из образа postgres с тегом 13.10
+
+
+# Указать сеть.
+docker run --env-file .env \
+           --net django-network \
+           --name taski_backend_container \
+           -p 8000:8000 taski_backend
+
+
+
+#########
+Статика
+docker compose exec backend python manage.py collectstatic
+docker compose exec backend cp -r /app/collected_static/. /backend_static/static/
